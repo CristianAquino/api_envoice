@@ -1,0 +1,353 @@
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+                        http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="EnvoiceReport"
+              pageWidth="595"
+              pageHeight="842"
+              columnWidth="555"
+              leftMargin="20"
+              rightMargin="20"
+              topMargin="20"
+              bottomMargin="20"
+              orientation="Portrait">
+    <property name="com.jaspersoft.studio.unit." value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+    <style name="Roboto"
+           fontSize="11"
+           pdfFontName="fonts/roboto/Roboto-Regular.ttf"
+           pdfEncoding="Identity-H"
+           isPdfEmbedded="true"/>
+    <style name="Roboto_Bold"
+           fontSize="11"
+           isBold="true"
+           pdfFontName="fonts/roboto/Roboto-Bold.ttf"
+           pdfEncoding="Identity-H"
+           isPdfEmbedded="true"/>
+    <!-- PARAMETRO -->
+    <parameter name="logo" class="java.io.InputStream"/>
+    <!-- PARAMETRO EMPRESA -->
+    <parameter name="nombreEmpresa" class="java.lang.String"/>
+    <parameter name="rucEmpresa" class="java.lang.String"/>
+    <parameter name="direccionEmpresa" class="java.lang.String"/>
+    <parameter name="telefonoEmpresa" class="java.lang.String"/>
+    <parameter name="datosCliente" class="com.envoice.api_envoice.Model.ClientModel"/>
+    <!-- PARAMETRO PAGO -->
+    <parameter name="bancoPago" class="java.lang.String"/>
+    <parameter name="ibanPago" class="java.lang.String"/>
+    <parameter name="bicPago" class="java.lang.String"/>
+    <!-- FIELD -->
+    <field name="title" class="java.lang.String"/>
+    <field name="price" class="java.lang.Double"/>
+    <field name="description" class="java.lang.String"/>
+    <field name="quantity" class="java.lang.Integer"/>
+    <!-- VARIABLE -->
+    <variable name="total" class="java.lang.Double" calculation="Sum">
+        <variableExpression><![CDATA[$F{price}*$F{quantity}]]></variableExpression>
+    </variable>
+    <!-- SUBTOTALES -->
+    <group name="GRUPO_GENERAL">
+        <groupExpression><![CDATA[1]]></groupExpression>
+        <groupFooter>
+            <band height="90" splitType="Prevent">
+                <!-- SUBTOTAL -->
+                <staticText>
+                    <reportElement x="395" y="0" width="80" height="20" style="Roboto_Bold"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font size="10"></font>
+                    </textElement>
+                    <text><![CDATA[SUBTOTAL]]></text>
+                </staticText>
+                <textField pattern="S/ #,##0.00">
+                    <reportElement x="475" y="0" width="80" height="20"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                    <textFieldExpression><![CDATA[$V{total}]]></textFieldExpression>
+                </textField>
+                <!-- IGV -->
+                <staticText>
+                    <reportElement x="395" y="20" width="80" height="20" style="Roboto_Bold"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font size="10"></font>
+                    </textElement>
+                    <text><![CDATA[IGV]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="475" y="20" width="80" height="20" style="Roboto"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font size="10"></font>
+                    </textElement>
+                    <text><![CDATA[18%]]></text>
+                </staticText>
+                <!-- TOTAL IGV -->
+                <staticText>
+                    <reportElement x="395" y="40" width="80" height="20" style="Roboto_Bold"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font size="10"></font>
+                    </textElement>
+                    <text><![CDATA[TOTAL IGV]]></text>
+                </staticText>
+                <textField pattern="S/ #,##0.00">
+                    <reportElement x="475" y="40" width="80" height="20"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                    <textFieldExpression><![CDATA[$V{total}*1.18]]></textFieldExpression>
+                </textField>
+                <!-- TOTAL -->
+                <staticText>
+                    <reportElement x="395" y="60" width="80" height="20" style="Roboto_Bold"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font size="10"></font>
+                    </textElement>
+                    <text><![CDATA[TOTAL]]></text>
+                </staticText>
+                <textField pattern="S/ #,##0.00">
+                    <reportElement x="475" y="60" width="80" height="20"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                    <textFieldExpression><![CDATA[$V{total}*1.18]]></textFieldExpression>
+                </textField>
+            </band>
+        </groupFooter>
+    </group>
+    <!-- MARCA DE AGUA -->
+    <background>
+        <band height="802">
+            <textField>
+                <reportElement x="0" y="351" width="555" height="100" forecolor="#D3D3D3" mode="Transparent"
+                               style="Roboto_Bold"/>
+                <textElement textAlignment="Center">
+                    <font size="60"/>
+                </textElement>
+                <textFieldExpression><![CDATA["PROFORMA"]]></textFieldExpression>
+            </textField>
+        </band>
+    </background>
+    <!-- TITULO PROFORMA -->
+    <title>
+        <band height="40">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="40" style="Roboto_Bold"/>
+                <textElement textAlignment="Left">
+                    <font size="24"></font>
+                </textElement>
+                <text><![CDATA[PROFORMA]]></text>
+            </staticText>
+        </band>
+    </title>
+    <!-- DATOS PROFORMA -->
+    <pageHeader>
+        <band height="160" splitType="Stretch">
+            <!-- FRAME PRINCIPAL-->
+            <frame>
+                <reportElement x="0" y="0" width="555" height="100" style="Roboto_Bold"
+                               stretchType="RelativeToTallestObject"/>
+                <!-- DATOS EMPRESA -->
+                <frame>
+                    <reportElement x="0" y="0" width="200" height="100" stretchType="RelativeToTallestObject"/>
+                    <!-- NOMBRE EMPRESA -->
+                    <textField isStretchWithOverflow="true">
+                        <reportElement x="0" y="20" width="200" height="20" style="Roboto_Bold" positionType="Float"/>
+                        <textFieldExpression><![CDATA[$P{nombreEmpresa}]]></textFieldExpression>
+                    </textField>
+                    <!-- RUC EMPRESA -->
+                    <textField isStretchWithOverflow="true">
+                        <reportElement x="0" y="40" width="200" height="20" style="Roboto" positionType="Float"/>
+                        <textFieldExpression><![CDATA["RUC: "+$P{rucEmpresa}]]></textFieldExpression>
+                    </textField>
+                    <!-- DIRECCION EMPRESA -->
+                    <textField isStretchWithOverflow="true">
+                        <reportElement x="0" y="60" width="200" height="20" style="Roboto" positionType="Float"/>
+                        <textFieldExpression><![CDATA["DIRECCION: "+$P{direccionEmpresa}]]></textFieldExpression>
+                    </textField>
+                    <!-- TELEFONO EMPRESA -->
+                    <textField isStretchWithOverflow="true">
+                        <reportElement x="0" y="80" width="200" height="20" style="Roboto" positionType="Float"/>
+                        <textFieldExpression><![CDATA["TELEFONO: "+$P{telefonoEmpresa}]]></textFieldExpression>
+                    </textField>
+                </frame>
+                <!-- LOGO EMPRESA -->
+                <frame>
+                    <reportElement x="200" y="0" width="155" height="100"/>
+                    <image hAlign="Center" vAlign="Middle">
+                        <reportElement x="0" y="0" width="155" height="100"/>
+                        <imageExpression><![CDATA[$P{logo}]]></imageExpression>
+                    </image>
+                </frame>
+                <!-- DATOS CLIENTE -->
+                <frame>
+                    <reportElement x="355" y="0" width="200" height="100"/>
+                    <!-- DATOS CLIENTE -->
+                    <staticText>
+                        <reportElement x="0" y="20" width="200" height="20" style="Roboto_Bold"/>
+                        <text><![CDATA[FACTURAR A:]]></text>
+                    </staticText>
+                    <!-- NOMBRE CLIENTE -->
+                    <textField isStretchWithOverflow="true">
+                        <reportElement x="0" y="40" width="200" height="20" style="Roboto" positionType="Float"/>
+                        <textFieldExpression><![CDATA[$P{datosCliente}.getFullName()]]></textFieldExpression>
+                    </textField>
+                    <!-- RUC CLIENTE -->
+                    <textField isStretchWithOverflow="true">
+                        <reportElement x="0" y="60" width="200" height="20" style="Roboto" positionType="Float"/>
+                        <textFieldExpression><![CDATA[$P{datosCliente}.getRuc()]]></textFieldExpression>
+                    </textField>
+                    <!-- DIRECCION CLIENTE -->
+                    <textField isStretchWithOverflow="true">
+                        <reportElement x="0" y="80" width="200" height="20" style="Roboto" positionType="Float"/>
+                        <textFieldExpression><![CDATA[$P{datosCliente}.getAddress()]]></textFieldExpression>
+                    </textField>
+                </frame>
+            </frame>
+            <!-- SEPARACION -->
+            <line>
+                <reportElement x="0" y="120" width="555" height="1" forecolor="#1963EF" positionType="Float"/>
+                <graphicElement>
+                    <pen lineWidth="2.0"/>
+                </graphicElement>
+            </line>
+            <!-- TABLA -->
+            <frame>
+                <reportElement x="0" y="140" width="555" height="20"/>
+                <!-- DESCRIPCION -->
+                <rectangle>
+                    <reportElement x="0" y="0" width="315" height="20" backcolor="#1963EF"/>
+                </rectangle>
+                <staticText>
+                    <reportElement x="0" y="0" width="315" height="20" style="Roboto_Bold" forecolor="#ffffff"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font size="10"></font>
+                    </textElement>
+                    <text><![CDATA[DESCRIPCIÓN]]></text>
+                </staticText>
+                <!-- CANTIDAD -->
+                <rectangle>
+                    <reportElement x="315" y="0" width="80" height="20" backcolor="#1963EF"/>
+                </rectangle>
+                <staticText>
+                    <reportElement x="315" y="0" width="80" height="20" style="Roboto_Bold" forecolor="#ffffff"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font size="10"></font>
+                    </textElement>
+                    <text><![CDATA[CANTIDAD]]></text>
+                </staticText>
+                <!-- PRECIO -->
+                <rectangle>
+                    <reportElement x="395" y="0" width="80" height="20" backcolor="#1963EF"/>
+                </rectangle>
+                <staticText>
+                    <reportElement x="395" y="0" width="80" height="20" style="Roboto_Bold" forecolor="#ffffff"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font size="10"></font>
+                    </textElement>
+                    <text><![CDATA[PRECIO]]></text>
+                </staticText>
+                <!-- TOTAL -->
+                <rectangle>
+                    <reportElement x="475" y="0" width="80" height="20" backcolor="#1963EF"/>
+                </rectangle>
+                <staticText>
+                    <reportElement x="475" y="0" width="80" height="20" style="Roboto_Bold" forecolor="#ffffff"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font size="10"></font>
+                    </textElement>
+                    <text><![CDATA[TOTAL]]></text>
+                </staticText>
+            </frame>
+        </band>
+    </pageHeader>
+    <detail>
+        <band height="20" splitType="Stretch">
+            <rectangle>
+                <reportElement x="0" y="0" width="315" height="20" stretchType="RelativeToTallestObject"/>
+            </rectangle>
+            <rectangle>
+                <reportElement x="315" y="0" width="80" height="20" stretchType="RelativeToTallestObject"/>
+            </rectangle>
+            <rectangle>
+                <reportElement x="395" y="0" width="80" height="20" stretchType="RelativeToTallestObject"/>
+            </rectangle>
+            <rectangle>
+                <reportElement x="475" y="0" width="80" height="20" stretchType="RelativeToTallestObject"/>
+            </rectangle>
+            <textField isStretchWithOverflow="true">
+                <reportElement x="10" y="0" width="315" height="20" positionType="Float"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="Arial" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true">
+                <reportElement x="315" y="0" width="80" height="20" positionType="Float"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Arial" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+            </textField>
+            <textField pattern="S/ #,##0.00" isStretchWithOverflow="true">
+                <reportElement x="395" y="0" width="80" height="20" positionType="Float"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Arial" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+            </textField>
+            <textField pattern="S/ #,##0.00" isStretchWithOverflow="true">
+                <reportElement x="475" y="0" width="80" height="20" positionType="Float"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Arial" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{quantity}*$F{price}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <lastPageFooter>
+        <band height="140" splitType="Stretch">
+            <line>
+                <reportElement x="0" y="0" width="555" height="1" forecolor="#1963EF"/>
+                <graphicElement>
+                    <pen lineWidth="2.0"/>
+                </graphicElement>
+            </line>
+            <!-- FORMA DE PAGO -->
+            <frame>
+                <reportElement x="0" y="0" width="280" height="100"/>
+                <staticText>
+                    <reportElement x="0" y="10" width="280" height="20" style="Roboto_Bold"/>
+                    <text><![CDATA[CONDICIONES Y FORMAS DE PAGO]]></text>
+                </staticText>
+                <textField isStretchWithOverflow="true">
+                    <reportElement x="0" y="30" width="280" height="20" style="Roboto" positionType="Float"/>
+                    <textFieldExpression><![CDATA[$P{bancoPago}]]></textFieldExpression>
+                </textField>
+                <textField isStretchWithOverflow="true">
+                    <reportElement x="0" y="50" width="280" height="20" style="Roboto" positionType="Float"/>
+                    <textFieldExpression><![CDATA["IBAN: "+$P{ibanPago}]]></textFieldExpression>
+                </textField>
+                <textField isStretchWithOverflow="true">
+                    <reportElement x="0" y="70" width="280" height="20" style="Roboto" positionType="Float"/>
+                    <textFieldExpression><![CDATA["SWIFT/BIC: "+$P{bicPago}]]></textFieldExpression>
+                </textField>
+            </frame>
+            <!-- MENSAJE DESPEDIDA -->
+            <frame>
+                <reportElement x="0" y="100" width="555" height="40"/>
+                <rectangle>
+                    <reportElement x="0" y="0" width="555" height="40" backcolor="#1963EF"/>
+                    <graphicElement>
+                        <pen lineWidth="0"/>
+                    </graphicElement>
+                </rectangle>
+                <staticText>
+                    <reportElement x="0" y="0" width="555" height="40" style="Roboto_Bold" forecolor="#ffffff"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font size="18"></font>
+                    </textElement>
+                    <text><![CDATA[GRACIAS POR SU CONFIANZA]]></text>
+                </staticText>
+            </frame>
+        </band>
+    </lastPageFooter>
+</jasperReport>

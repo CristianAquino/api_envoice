@@ -13,9 +13,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf->csrf.disable())
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                         authReq ->
                                 authReq.requestMatchers("/**")
@@ -24,6 +24,5 @@ public class SecurityConfig {
                                         .authenticated())
                 .formLogin(withDefaults())
                 .build();
-
     }
 }
